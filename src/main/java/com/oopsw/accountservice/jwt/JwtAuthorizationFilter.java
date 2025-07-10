@@ -42,10 +42,9 @@ public class JwtAuthorizationFilter
             AccountDetails details=(AccountDetails) a.getPrincipal();
             log.info(details.getUser().getEmail()+" - loginok");
             return a;
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch (IOException e) {
+            throw new RuntimeException(e); // 예외를 반드시 throw!
         }
-        return null;
     }
 
     @Override //ok

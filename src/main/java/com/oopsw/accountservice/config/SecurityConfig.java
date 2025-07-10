@@ -2,6 +2,7 @@ package com.oopsw.accountservice.config;
 
 import com.oopsw.accountservice.account.jpa.AccountRepository;
 import com.oopsw.accountservice.auth.AccountOauth2UserService;
+import com.oopsw.accountservice.auth.CustomAuthenticationEntryPoint;
 import com.oopsw.accountservice.jwt.JwtAuthorizationFilter;
 import com.oopsw.accountservice.jwt.JwtBasicAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,9 @@ public class SecurityConfig {
   // 2. SecurityFilterChain 설정
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                 AuthenticationManager authenticationManager, AccountRepository accountRepository) throws Exception {
+                                                 AuthenticationManager authenticationManager,
+                                                  AccountRepository accountRepository,
+                                                  CustomAuthenticationEntryPoint entryPoint) throws Exception {
 
     http.csrf(csrf -> csrf.disable()).headers(headers -> headers
         .frameOptions(frameOptions -> frameOptions.sameOrigin()) //이걸 추가해야 H2-CONSOLE을 쓸수있음
@@ -46,6 +49,8 @@ public class SecurityConfig {
     http.authorizeHttpRequests(auth ->
             auth.requestMatchers("/api/v1/user/**").authenticated() //로그인 하면 모두
                     .anyRequest().permitAll() );
+
+    http.exceptionHandling(eh -> eh.authenticationEntryPoint(entryPoint));
 
     http.oauth2Login(oauth2 -> oauth2
             .loginPage("/account/login-view.html")

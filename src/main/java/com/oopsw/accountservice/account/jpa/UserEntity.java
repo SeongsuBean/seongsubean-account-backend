@@ -3,6 +3,7 @@ package com.oopsw.accountservice.account.jpa;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class UserEntity {
   @Column(length = 320)
   String email;
 
-  @Column(nullable = false, unique = true, length = 50)
+  @Column(nullable = false, unique = true, length = 200)
   String nickname;
   @Column(name = "ENCRYPTED_PASSWORD", nullable = false, length = 100)
   String encryptedPwd;
@@ -34,5 +35,12 @@ public class UserEntity {
   String role;
 
   @Column(name = "IS_OAUTH", nullable = false)
-  Boolean isOauth;
+  boolean isOauth;
+
+  @PrePersist
+  public void prePersist() {
+    if (this.joinDate == null) {
+      this.joinDate = LocalDate.now();
+    }
+  }
 }
