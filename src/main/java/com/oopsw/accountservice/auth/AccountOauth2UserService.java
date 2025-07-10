@@ -51,7 +51,7 @@ public class AccountOauth2UserService extends DefaultOAuth2UserService {
       user.setEncryptedPwd(fakePassword);
       user.setBirthDate(LocalDate.of(1999,2,20));
       user.setPhoneNumber("010-2323-2323");
-      user.setIsOauth(true);
+      user.setOauth(true);
       accountRepository.save(user);
     }
     return new AccountDetails(user, oAuth2User.getAttributes());
