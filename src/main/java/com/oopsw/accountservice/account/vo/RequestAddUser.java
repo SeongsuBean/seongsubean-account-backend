@@ -1,4 +1,4 @@
-package com.oopsw.accountservice.vo;
+package com.oopsw.accountservice.account.vo;
 
 import java.time.LocalDate;
 import lombok.Data;
