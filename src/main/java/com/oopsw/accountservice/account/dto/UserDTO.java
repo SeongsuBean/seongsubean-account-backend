@@ -22,4 +22,5 @@ public class UserDTO {
   private String role;
   private boolean isOauth;
   private LocalDate birthDate;
+  private LocalDate joinDate;
 }

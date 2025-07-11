@@ -4,7 +4,6 @@ import com.oopsw.accountservice.account.jpa.AccountRepository;
 import com.oopsw.accountservice.account.jpa.UserEntity;
 import com.oopsw.accountservice.config.EncoderConfig;
 import java.time.LocalDate;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,5 +54,13 @@ public class AccountRepositoryTest {
   public void deleteAccount_Success() {
     accountRepository.deleteByEmail("test@test.com");
     log.info(accountRepository.existsByEmail("test@test.com"));
+  }
+
+  @Test
+  public void setUserInfo_Success() {
+    UserEntity user = accountRepository.findByEmail("test@test.com");
+    user.setEncryptedPwd(bCryptPasswordEncoder.encode("12345"));
+    user.setNickname("test22");
+    log.info(accountRepository.save(user));
   }
 }

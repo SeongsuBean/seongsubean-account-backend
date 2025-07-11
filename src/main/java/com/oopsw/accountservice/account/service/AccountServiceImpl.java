@@ -3,6 +3,7 @@ package com.oopsw.accountservice.account.service;
 import com.oopsw.accountservice.account.dto.UserDTO;
 import com.oopsw.accountservice.account.jpa.AccountRepository;
 import com.oopsw.accountservice.account.jpa.UserEntity;
+import com.oopsw.accountservice.account.vo.RequestEditProfile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,5 +44,13 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public void deleteAccount(String email) {
     accountRepository.deleteByEmail(email);
+  }
+
+
+  @Override
+  public void setUserInfo(RequestEditProfile user, UserDTO userDTO) {
+    if (user.getNewPassword() != null && !user.getNewPassword().isBlank()) userDTO.setEncryptedPwd(bCryptPasswordEncoder.encode(user.getNewPassword()));
+    if (user.getNewNickname() != null && !user.getNewNickname().isBlank()) userDTO.setNickname(user.getNewNickname());
+    accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
   }
 }
