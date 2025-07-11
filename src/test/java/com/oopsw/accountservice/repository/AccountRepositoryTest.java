@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,8 +23,21 @@ public class AccountRepositoryTest {
   @Autowired
   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+  @BeforeEach
+  public void addUser() {
+    UserEntity user = new UserEntity();
+    user.setEncryptedPwd(bCryptPasswordEncoder.encode("1234"));
+    user.setPhoneNumber("010-2323-2323");
+    user.setEmail("test@test.com");
+    user.setNickname("test");
+    user.setRole("CUSTOMER");
+    user.setBirthDate(LocalDate.of(2000,2,20));
+    user.setOauth(false);
+    accountRepository.save(user);
+  }
+
   @Test
-  public void addMenu_Success() {
+  public void addUser_Success() {
     UserEntity user = new UserEntity();
     user.setEncryptedPwd(bCryptPasswordEncoder.encode("1234"));
     user.setPhoneNumber("010-2323-2323");
@@ -35,5 +49,11 @@ public class AccountRepositoryTest {
     accountRepository.save(user);
     UserEntity found = accountRepository.findById("test@test.com").get();
     Assertions.assertWith(found.getNickname()).isEqualTo("test");
+  }
+
+  @Test
+  public void deleteAccount_Success() {
+    accountRepository.deleteByEmail("test@test.com");
+    log.info(accountRepository.existsByEmail("test@test.com"));
   }
 }
