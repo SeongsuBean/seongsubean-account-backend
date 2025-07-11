@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +15,7 @@ public class AccountServiceImpl implements AccountService {
   private final AccountRepository accountRepository;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
   @Override
-  public boolean addUser(UserDTO userDTO) {
+  public boolean addAccount(UserDTO userDTO) {
     boolean result = false;
     userDTO.setEncryptedPwd(bCryptPasswordEncoder.encode(userDTO.getPassword()));
     userDTO.setOauth(false);
@@ -36,5 +37,11 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public boolean existsEmail(String email) {
     return accountRepository.existsByEmail(email);
+  }
+
+  @Transactional
+  @Override
+  public void deleteAccount(String email) {
+    accountRepository.deleteByEmail(email);
   }
 }
