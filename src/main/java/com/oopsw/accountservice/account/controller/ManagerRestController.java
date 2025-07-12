@@ -4,9 +4,12 @@ import com.oopsw.accountservice.account.service.AccountService;
 import com.oopsw.accountservice.account.vo.ResponseUser;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +33,12 @@ public class ManagerRestController {
   @GetMapping("/users/{email}")
   public ResponseEntity<ResponseUser> getUser(@PathVariable String email){
     return ResponseEntity.ok(new ModelMapper().map(accountService.getUserByEmail(email), ResponseUser.class));
+  }
+
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping("/users/{email}")
+  public ResponseEntity<Map<String, String>> deleteUser(@PathVariable  String email) {
+    accountService.deleteAccount(email);
+    return ResponseEntity.ok(Map.of("message", "회원 삭제를 완료하였습니다."));
   }
 }
