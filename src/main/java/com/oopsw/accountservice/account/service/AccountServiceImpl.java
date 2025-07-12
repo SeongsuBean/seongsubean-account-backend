@@ -53,4 +53,9 @@ public class AccountServiceImpl implements AccountService {
     if (user.getNewNickname() != null && !user.getNewNickname().isBlank()) userDTO.setNickname(user.getNewNickname());
     accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
   }
+
+  @Override
+  public void setUserImage(UserDTO userDTO) {
+    accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
+  }
 }
