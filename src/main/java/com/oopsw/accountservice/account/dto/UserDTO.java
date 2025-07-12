@@ -21,6 +21,7 @@ public class UserDTO {
   private String image;
   private String role;
   private boolean isOauth;
+  private boolean isReport;
   private LocalDate birthDate;
   private LocalDate joinDate;
 }

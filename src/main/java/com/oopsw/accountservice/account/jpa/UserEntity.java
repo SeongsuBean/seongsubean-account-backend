@@ -37,6 +37,9 @@ public class UserEntity {
   @Column(name = "IS_OAUTH", nullable = false)
   boolean isOauth;
 
+  @Column(name = "IS_REPORT", nullable = false)
+  boolean isReport;
+
   @PrePersist
   public void prePersist() {
     if (this.joinDate == null) {
