@@ -9,4 +9,5 @@ public interface AccountService {
   boolean existsEmail(String email);
   void deleteAccount(String email);
   void setUserInfo(RequestEditProfile user, UserDTO userDTO);
+  void setUserImage(UserDTO userDTO);
 }
