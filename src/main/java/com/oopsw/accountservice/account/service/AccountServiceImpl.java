@@ -4,6 +4,8 @@ import com.oopsw.accountservice.account.dto.UserDTO;
 import com.oopsw.accountservice.account.jpa.AccountRepository;
 import com.oopsw.accountservice.account.jpa.UserEntity;
 import com.oopsw.accountservice.account.vo.RequestEditProfile;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +22,7 @@ public class AccountServiceImpl implements AccountService {
     boolean result = false;
     userDTO.setEncryptedPwd(bCryptPasswordEncoder.encode(userDTO.getPassword()));
     userDTO.setOauth(false);
+    userDTO.setReport(false);
     userDTO.setRole("CUSTOMER");
     try{
       accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
@@ -57,5 +60,17 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public void setUserImage(UserDTO userDTO) {
     accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
+  }
+
+  @Override
+  public List<UserDTO> getAllUsers() {
+    List<UserDTO> userList = new ArrayList<>();
+    accountRepository.findAll().forEach(userEntity -> {userList.add(new ModelMapper().map(userEntity, UserDTO.class));});
+    return userList;
+  }
+
+  @Override
+  public UserDTO getUserByEmail(String email) {
+    return new ModelMapper().map(accountRepository.findByEmail(email), UserDTO.class);
   }
 }
