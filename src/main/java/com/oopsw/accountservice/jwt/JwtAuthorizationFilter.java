@@ -58,7 +58,7 @@ public class JwtAuthorizationFilter
                 .withSubject(details.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.TIMEOUT))
                 .withClaim("id", details.getUser().getEmail())
-            .withClaim("role", details.getRole())
+                .withClaim("role", details.getRole())
                 .withClaim("username", details.getUsername())
                 .sign(Algorithm.HMAC512(JwtProperties.SECURET))
                 ;
