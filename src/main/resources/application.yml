@@ -34,10 +34,12 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+#    url: jdbc:h2:mem:testdb
+#    driverClassName: org.h2.Driver
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?characterEncoding=UTF-8
+    username: developer
+    password: kostadev
     #    data: classpath:data.sql
   h2:
     console:
