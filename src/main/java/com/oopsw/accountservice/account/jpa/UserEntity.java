@@ -21,7 +21,7 @@ public class UserEntity {
 
   @Column(nullable = false, unique = true, length = 200)
   String nickname;
-  @Column(name = "ENCRYPTED_PASSWORD", nullable = false, length = 100)
+  @Column(name = "ENCRYPTED_PASSWORD", nullable = false, length = 500)
   String encryptedPwd;
   @Column(name = "BIRTH_DATE", nullable = false)
   LocalDate birthDate;

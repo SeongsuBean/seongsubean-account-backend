@@ -49,10 +49,9 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
-    database: h2
     defer-datasource-initialization: true
 
 eureka:
