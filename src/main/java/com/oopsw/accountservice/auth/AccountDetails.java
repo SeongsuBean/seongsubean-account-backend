@@ -76,4 +76,6 @@ public class AccountDetails implements UserDetails, OAuth2User {
   public String getImage(){
     return user.getImage();
   }
+
+  public String getRole() {return user.getRole();}
 }
