@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RequestEditProfile {
+  private String image;
   private String newNickname;
   private String newPassword;
   private String password;
