@@ -73,4 +73,9 @@ public class AccountServiceImpl implements AccountService {
   public UserDTO getUserByEmail(String email) {
     return new ModelMapper().map(accountRepository.findByEmail(email), UserDTO.class);
   }
+
+  @Override
+  public void setUserRole(UserDTO userDTO) {
+    accountRepository.save(new ModelMapper().map(userDTO, UserEntity.class));
+  }
 }
