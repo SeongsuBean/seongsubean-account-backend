@@ -103,17 +103,15 @@ public class AccountRestController {
   }
 
   //회원 이미지 수정
-  @PutMapping("/profile/image/{file}")
-  public ResponseEntity<Map<String, String>> setImage(@PathVariable String file,
+  @PutMapping("/profile/image")
+  public ResponseEntity<Map<String, String>> setImage(@RequestBody String imageFile,
       Authentication auth){
-
     AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
     UserDTO userDTO = new ModelMapper().map(accountDetails.getUser(), UserDTO.class);
 
-    String safeFilename = file.replaceAll("\\s+", "_");
-    String newFilename = UUID.randomUUID() + "_" + safeFilename;
+    String safeFilename = imageFile.replaceAll("\\s+", "_");
 
-    userDTO.setImage(newFilename);
+    userDTO.setImage(safeFilename);
     accountService.setUserImage(userDTO);
 
     return ResponseEntity.ok(Map.of("message", "업로드 성공"));
