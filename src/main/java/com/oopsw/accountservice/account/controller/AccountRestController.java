@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,11 +30,25 @@ public class AccountRestController {
   private final AccountService accountService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+  @PutMapping("/role/{role}")
+  public ResponseEntity<Map<String, String>> setRole(@PathVariable String role, Authentication auth){
+    if ("owner".equalsIgnoreCase(role)) {role = "OWNER";}
+    else if ("customer".equalsIgnoreCase(role)) {role = "CUSTOMER";}
+    else {return ResponseEntity.badRequest().body(Map.of("message", role + " 권한은 없습니다."));}
+
+    AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
+    UserDTO userDTO = new ModelMapper().map(accountDetails.getUser(), UserDTO.class);
+
+    userDTO.setRole(role);
+    accountService.setUserRole(userDTO);
+
+    return ResponseEntity.ok(Map.of("message", "권한이 " + role + "로 변경되었습니다."));
+  }
+
   //회원가입
   @PostMapping
   public ResponseEntity<Map<String, Boolean>> joinAccount(@RequestBody RequestAddUser user) {
-    return ResponseEntity.ok().body(
-        Map.of("result", accountService.addAccount(new ModelMapper().map(user, UserDTO.class))));
+    return ResponseEntity.ok().body(Map.of("result", accountService.addAccount(new ModelMapper().map(user, UserDTO.class))));
   }
 
   //이메일 중복검사
@@ -91,18 +103,14 @@ public class AccountRestController {
   }
 
   //회원 이미지 수정
-  @PutMapping("/profile/image")
-  public ResponseEntity<Map<String, String>> setImage(@RequestParam("file") MultipartFile file,
+  @PutMapping("/profile/image/{file}")
+  public ResponseEntity<Map<String, String>> setImage(@PathVariable String file,
       Authentication auth){
-    if (file.isEmpty()) {
-      return ResponseEntity.badRequest().body(Map.of("message", "파일이 비어 있습니다."));
-    }
 
     AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
     UserDTO userDTO = new ModelMapper().map(accountDetails.getUser(), UserDTO.class);
 
-    String originalFilename = file.getOriginalFilename();
-    String safeFilename = originalFilename.replaceAll("\\s+", "_");
+    String safeFilename = file.replaceAll("\\s+", "_");
     String newFilename = UUID.randomUUID() + "_" + safeFilename;
 
     userDTO.setImage(newFilename);

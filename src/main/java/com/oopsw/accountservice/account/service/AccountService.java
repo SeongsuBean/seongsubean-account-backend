@@ -13,4 +13,5 @@ public interface AccountService {
   void setUserImage(UserDTO userDTO);
   List<UserDTO> getAllUsers();
   UserDTO getUserByEmail(String email);
+  void setUserRole(UserDTO userDTO);
 }
